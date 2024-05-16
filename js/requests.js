@@ -1,5 +1,5 @@
 function loadFile() {
-  let url = "http://localhost:8000/data.json/";
+  let url = "http://localhost:8000/data.json";
 
   fetch(url)
   .then(response => {
