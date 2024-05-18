@@ -1,5 +1,5 @@
-import { growthWithoutLimaCallao } from "./growthWithoutLimaCallao.js";
-import { compareRegions } from "./compareRegions.js";
+import { growthWithoutLimaCallao } from "./ejercicio6.js";
+import { compareRegions } from "./ejercicio7.js";
 import { arequipaInfected } from "./ejercicio4.js";
 
 google.charts.load('current', {'packages':['corechart']});
