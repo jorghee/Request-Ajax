@@ -62,7 +62,7 @@ export function drawComparativeChart(info) {
     hAxis: {
       title: "Fecha",
       slantedText: true,
-      slantedTextAngle: 45
+      slantedTextAngle: 45,
     },
     vAxis: {
       title: "Número de Infectados"
