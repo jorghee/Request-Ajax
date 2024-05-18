@@ -1,10 +1,11 @@
-import { growthWithoutLimaCallao } from "./ejercicio6.js";
-import { compareRegions } from "./ejercicio7.js";
-import { arequipaInfected } from "./ejercicio4.js";
-import { comparativeLineChart } from "./ejercicio5.js";
+import { listRegions } from "./ejercicio1.js";
 import { totalConfirmed } from "./ejercicio2.js";
 import { top10Regions } from "./ejercicio3.js";
-import { listRegions } from "./ejercicio1.js";
+import { arequipaInfected } from "./ejercicio4.js";
+import { comparativeLineChart } from "./ejercicio5.js";
+import { growthWithoutLimaCallao } from "./ejercicio6.js";
+import { compareRegions } from "./ejercicio7.js";
+import { drawComparativeChart } from "./ejercicio8.js";
 
 google.charts.load('current', {'packages':['corechart']});
 google.charts.setOnLoadCallback(initialize);
@@ -30,7 +31,7 @@ function initialize() {
     document.getElementById('growthWithoutLimaCallao').addEventListener('click', showGrowthWithoutLimaCallao);
     document.getElementById('choiceToCompareRegions').addEventListener('click', choiceToCompareRegions);
     document.getElementById('compareRegions').addEventListener('click', showCompareRegions);
-    // document.getElementById('dailyGrowthWithoutLimaCallao').addEventListener('click', dailyGrowthWithoutLimaCallao);
+    document.getElementById('dailyGrowthWithoutLimaCallao').addEventListener('click', () => drawComparativeChart(data));
   });
 }
 function showlistRegions(){

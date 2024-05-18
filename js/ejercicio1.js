@@ -1,3 +1,4 @@
+// Autor: Sebastian Zuñiga
 export function listRegions(data){
   document.getElementById('result').innerHTML = '';
   data.forEach(element => {
