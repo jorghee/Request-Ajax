@@ -1,5 +1,6 @@
 import { growthWithoutLimaCallao } from "./growthWithoutLimaCallao.js";
 import { compareRegions } from "./compareRegions.js";
+import { arequipaInfected } from "./ejercicio4.js";
 
 google.charts.load('current', {'packages':['corechart']});
 google.charts.setOnLoadCallback(initialize);
@@ -20,13 +21,20 @@ function initialize() {
     // document.getElementById('listRegions').addEventListener('click', listRegions);
     // document.getElementById('totalConfirmed').addEventListener('click', totalConfirmed);
     // document.getElementById('top10Regions').addEventListener('click', top10Regions);
-    // document.getElementById('arequipaInfected').addEventListener('click', arequipaInfected);
+    document.getElementById('arequipaInfected').addEventListener('click', showarequipaInfected);
     // document.getElementById('comparativeLineChart').addEventListener('click', comparativeLineChart);
     document.getElementById('growthWithoutLimaCallao').addEventListener('click', showGrowthWithoutLimaCallao);
     document.getElementById('choiceToCompareRegions').addEventListener('click', choiceToCompareRegions);
     document.getElementById('compareRegions').addEventListener('click', showCompareRegions);
     // document.getElementById('dailyGrowthWithoutLimaCallao').addEventListener('click', dailyGrowthWithoutLimaCallao);
   });
+}
+
+function showarequipaInfected(){
+  if(data){
+    arequipaInfected(data);
+  }
+  return;
 }
 function showGrowthWithoutLimaCallao() {
   if (!data) return;
