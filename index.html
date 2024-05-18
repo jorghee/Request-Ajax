@@ -1,38 +1,41 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width">
-    <title>Infectados Perú</title>
-    <meta name="description" content="Comparación y análisis del número de infectados en todas los departamentos de la República del Perú">
 
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Infectados Perú</title>
+  <meta name="description"
+    content="Comparación y análisis del número de infectados en todas los departamentos de la República del Perú">
+  <link rel="stylesheet" href="css/style.css">
+</head>
 
-  <body>
-    <div class="container">
-      <div class="choices">
-        <button id="listRegions">Listar Regiones</button>
-        <button id="totalConfirmed">Total Confirmados por Región</button>
-        <button id="top10Regions">Top 10 Regiones</button>
-        <button id="arequipaInfected">Infectados en Arequipa</button>
-        <button id="comparativeLineChart">Comparativo entre Regiones</button>
-        <button id="growthWithoutLimaCallao">Crecimiento sin Lima y Callao</button>
-        <button id="choiceToCompareRegions">Comparar Regiones específicas</button>
-        <button id="dailyGrowthWithoutLimaCallao">Crecimiento Diario sin Lima y Callao</button>
-      </div>
-
-      <!-- Este div estara oculto (hiden), solo será visible para el evento choiceToCompareRegions() -->
-      <div class="choiceRegions" style="display: none;">
-        <h2>Elija las regiones para comparar:</h2>
-        <select id="regionSelect" multiple></select>
-        <button id="compareRegions">Comparar</button>
-      </div>
-
-      <!-- Los gráficos en este div estimados, todas sus funciones deben modificar este div-->
-      <div id="result" class="result"></div>
+<body>
+  <div class="container">
+    <div class="choices">
+      <button id="listRegions">Listar Regiones</button>
+      <button id="totalConfirmed">Total Confirmados por Región</button>
+      <button id="top10Regions">Top 10 Regiones</button>
+      <button id="arequipaInfected">Infectados en Arequipa</button>
+      <button id="comparativeLineChart">Comparativo entre Regiones</button>
+      <button id="growthWithoutLimaCallao">Crecimiento sin Lima y Callao</button>
+      <button id="choiceToCompareRegions">Comparar Regiones específicas</button>
+      <button id="dailyGrowthWithoutLimaCallao">Crecimiento Diario sin Lima y Callao</button>
     </div>
 
-    <script type="module" src="js/main.js"></script>
-  </body>
+    <!-- Este div estara oculto (hiden), solo será visible para el evento choiceToCompareRegions() -->
+    <div class="choiceRegions" style="display: none;">
+      <h2>Elija las regiones para comparar:</h2>
+      <select id="regionSelect" multiple></select>
+      <button id="compareRegions">Comparar</button>
+    </div>
+
+    <!-- Los gráficos en este div estimados, todas sus funciones deben modificar este div-->
+    <div id="result" class="result"></div>
+  </div>
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+
 </html>

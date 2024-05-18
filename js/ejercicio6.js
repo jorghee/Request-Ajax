@@ -17,8 +17,8 @@ export function growthWithoutLimaCallao(data) {
 
   const options = {
     title: 'Crecimiento sin Lima y Callao',
-    width: 600,
-    height: 400,
+    width: 1200,
+    height: 800,
     hAxis: {
       title: 'Fecha',
       slantedText: true,

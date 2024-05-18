@@ -28,8 +28,8 @@ export function arequipaInfected(data){
   
   const options = {
     title: 'Infectados en Arequipa',
-    width: 800, // Ancho del gráfico
-    height: 400, // Alto del gráfico 
+    width: 1200, // Ancho del gráfico
+    height: 800, // Alto del gráfico 
     hAxis: {
       title: 'Fecha', // Título del eje x
       slantedText: true, 

@@ -23,8 +23,8 @@ export function compareRegions(data) {
 
   const options = {
     title: "Comparación entre Regiones",
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 800,
     hAxis: {
       title: "Fecha",
       slantedText: true,
