@@ -1,8 +1,7 @@
 export function listRegions(data){
-    const newData = data.filter(region) 
-
-    data.forEach(element => {
-      const row = [element.region];
-    });
-    
+  document.getElementById('result').innerHTML = '';
+  data.forEach(element => {
+    console.log(element.region);
+    document.getElementById('result').appendChild(document.createElement('li')).textContent = element.region;
+  });
 }

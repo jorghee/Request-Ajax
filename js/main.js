@@ -20,7 +20,7 @@ function loadFile() {
 
 function initialize() {
   loadFile().then(() => {
-    document.getElementById('listRegions').addEventListener('click', listRegions);
+    document.getElementById('listRegions').addEventListener('click', showlistRegions);
     // document.getElementById('totalConfirmed').addEventListener('click', totalConfirmed);
     // document.getElementById('top10Regions').addEventListener('click', top10Regions);
     document.getElementById('arequipaInfected').addEventListener('click', showarequipaInfected);
