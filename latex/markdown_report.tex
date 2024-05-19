@@ -1,0 +1,225 @@
+\section{Peticiones AJAX a un servidor node.js}
+
+\subsubsection{Creando el directorio que contiene los archivos Markdwon}
+Empezamos copiando archivos de ejemplo .md al directorio files\_markdown. Este directorio es el que responde a las peticiones AJAX.
+
+\begin{minted}{zsh}
+$ ls --tree
+files_markdown
+	calculator_with_java.md
+	example_readme_github.md
+	learning_github.md
+	project_ajax_regions.md
+	server_with_nodejs.md
+\end{minted}
+
+\subsection{Creando el servidor con Express}
+En este ocasión vamos a utilizar todos los siguientes paquetes para para poder resolver direcciones a archivos y directorios, escribir y leer archivos en directorios y lo más importante es el uso del paquete \textbf{markdown-it} que se encarga de hacer la conversion de markdown a html.
+
+\begin{minted}[bgcolor=background]{javascript}
+const path = require("path");
+const fs = require("fs");
+const MarkdownIt = require("markdown-it");
+const bp = require("body-parser");
+const express = require("express");
+const app = express();
+const md = new MarkdownIt();
+const MARKDOWN_DIR = path.resolve(__dirname, "files_markdown");
+
+app.use(bp.json());
+app.use(express.static("public"));
+\end{minted}
+
+Como se observa, hemos declarado una variable estatica \textbf{MARDOWN\_DIR} que almacena la dirección completa al directorio con el cual vamos a trabajar. Además, se ha configurado para que el servidor sirva archivos estaticos desde el directorio \textbf{public} con el objetivo de organizar mejor nuestro proyecto, ya que aqui se encontraran los archivos html, css y los scripts.
+\singlespacing
+Ahora podemos servir el archivo \textbf{index.html} para que nuestro proyecto pueda visualizarse.
+
+\begin{minted}[bgcolor=background]{javascript}
+/** 
+  * Creamos el servidor, request maneja las solicitudes que hacemos y 
+  * response es el objeto que maneja las respuestas que envia el servidor.
+  */ 
+app.get('/', (request, response) => {
+  response.sendFile(path.resolve(__dirname, "public/index.html"));
+});
+\end{minted}
+
+\subsection{Implemetando la función que lista los archivos Markdown}
+Lo primero que hacemos es configurar el servidor para que pueda manejar la peticióñ y enviar una respuesta al navegador. Como ahora solo necesitamos leer, vamos a usar el paquete \textbf{fs} de node.js que nos otorga funciones para poder interactuar con el sistema de archivos del sistema operativo donde se encuentra levantado el servidor.\\
+\singlespacing
+Podemos hacer que el servidor responda en formato \textbf{JSON} como es común hoy en día.
+
+\begin{minted}[bgcolor=background]{javascript}
+// Listar archivos Markdown
+app.get("/files", (request, response) => {
+  fs.readdir(MARKDOWN\_DIR, (error, files) => {
+    if (error) {
+      console.error("No se pudo leer los archivos:", error);
+      return;
+    }
+    response.json(files);
+  });
+});
+\end{minted}
+
+\subsubsection{Solicitud AJAX}
+Ahora que ya hemos configurado el servidor, podemos empezar a contruir nuestra petición AJAX, en este caso usaremos la función \mintinline[style=gruvbox-light]{javascript}{fetch()} para poder manejar las promesas.\\
+La solicitud la hacemos a la direccion en la cual ha sido configurada el servidor. Una vez que hecha la peticion, el servidor envía los nombres de los archivos .md y con la funcion \mintinline[style=gruvbox-light]{javascript}{then()} manejamos esta respuesta. 
+
+\begin{minted}[bgcolor=background]{javascript}
+function listMarkdownFiles() {
+  fetch("/files")
+    .then(response => response.json())
+    .then(files => {
+      let fileList = "";
+      files.forEach(file => fileList += `<li>${file}</li>`);
+      document.getElementById("files").innerHTML = fileList;
+    })
+    .catch(error => console.error("Error al listar los archivos:", error));
+}
+
+export { listMarkdownFiles };
+\end{minted}
+
+Entonces comenzamos iterando por cada valor, que en este caso son los nombres de los archivos, y generamos código html que se encargue de mostrar estos nombres como una lista. La lista que hemos generando con la etiqueta \textbf{li} la ponemos en el elemento de ID files, concluyendo asi la petición ajax.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.0\textwidth]{img/list_markdown.png}
+  \caption{Lisrado de los archivos markdown}
+\end{figure}
+
+\subsection{Implemetando la función que visualiza un archivo Markdown}
+Del mismo modo, nosotros tenemos que implementar la lógica para decirle al servidor cómo debe manejar una solicitud. En este excepcional caso, nos daremos cuenta que necesitamos enviar un identificador que le permita al servidor identificar qué archivo se desea visualizar. Por lo tanto, la configuración debe recibir un parametro.
+
+\begin{minted}[bgcolor=background]{javascript}
+app.get('/files/:fileName', (req, res) => {
+  const filename = req.params.fileName;
+  const filePath = path.resolve(MARKDOWN\_DIR, filename);
+  
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).json({ error: "Unable to read file" });
+    }
+    const htmlContent = md.render(data);
+    res.json({html: htmlContent});
+  });
+});
+\end{minted}
+
+Como se observa, el servidor recibe un parametro, dicho parametro es el nombre de archivo que se desea ver. Aqui lo complicado fue pensar cómo recuperar el nombre y enviarle al servidor. Despues veremos que agregando un evento a cada etiqueta \textbf{li} podemos enviar este identificador.
+\singlespacing
+Con el identificador ya recibido, podemos buscar el archivo en el correspondiente directorio y empezar a leerlo. Sin embargo, lo que hemos leido solo es texto con la extension .md, entonces, aqui usamos el paquete \textbf{markdown-it} que se encarga de hacer la conversion y que pueda ser visualizado por el navegador.
+
+\subsubsection{Realizando la petición AJAX}
+Con el servidor configurado, podemos empezar creando la función que se encarga de hacer la petición. La función entonces envia el identificador al servidor y este responde con un texto formateado a html. Basicamente ese el funcionamiento de esta función la cual modifica la etiqueta \textbf{div} de ID content en la cual muestra el texto html.
+
+\begin{minted}[bgcolor=background]{javascript}
+export { showMarkdownFile };
+
+function showMarkdownFile(fileName) {
+  fetch(`/files/${fileName}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(htmlContent => {
+      document.getElementById("content").innerHTML = htmlContent.html;
+    })
+    .catch(error => console.error("Error al mostrar el archivo:", error));
+}
+  
+export { showMarkdownFile };
+\end{minted}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.0\textwidth]{img/show_markdown.png}
+  \caption{Vista de un archivo especifico}
+\end{figure}
+
+\subsection{Implemetando la función que crea y almacena un archivo Markdown en el servidor}
+Finalmente necesitamos guardar en el servidor los archivos creados en la pagina web. Por lo tanto la funcion especifica del paquete \textbf{fs} que usaremos es \mintinline[style=gruvbox-light]{javascript}{writeFile()}. 
+\singlespacing
+El servidor necesita recibir el nombre del archivo y el contenido en si del archivo, por ello recuperamos los valores enviamos en el cuerpo de la solicitud y los usamos en el metodo mencionado del paquete \textbf{fs}
+
+\begin{minted}[bgcolor=background]{javascript}
+// Crear un archivo
+app.post("/files", (request, response) => {
+  // Recuperamos los valores
+  const { filename, content } = request.body;
+  console.log(filename, content);
+
+  const filePath = path.resolve(MARKDOWN_DIR, filename);
+  fs.writeFile(filePath, content, error => {
+    if (error) {
+      console.log(error);
+      response.json({ error: "No se pudo crear el archivo" });
+    }
+
+    response.json({ message: "Archivo creado existosamente" });
+  });
+});
+\end{minted}
+
+En este caso el servidor no devuelve nada especifico que se deba usar en el cliente, solo necesitamos saber si el almacenamiento del archivo fue existoso.
+
+\subsubsection{Realizando la petición AJAX}
+Para poder crear y elegir un nombre para guardar el archivo, hemos creado 2 elementos: \textbf{input} y \textbf{textarea}, entonces necesitamos obtener los valores de estos elementos. Una vez recogidos los valores, lo enviamos en el cuerpo de la solitud ajax. Basicamente en eso consiste la solicitud, finalizando asi las tres funcionalidades de esta pagina web.
+
+\begin{minted}[bgcolor=background]{javascript}
+import { listMarkdownFiles } from "./listMarkdown.js";
+
+function createMarkdownFile() {
+  const filename = document.getElementById("newFileName").value;
+  const content = document.getElementById("newFileContent").value;
+  console.log(filename, content);
+
+  // Generamos los parametros de la solicitud
+  const request = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    
+    // Pasamos el objeto con los valores de filename y content
+    body: JSON.stringify({ filename, content }),
+  };
+  
+  fetch("/files", request)
+    .then(response =>  response.json())
+    .then(data => {
+      console.log(data.message);
+      listMarkdownFiles();
+    })
+    .catch(error => console.error("Error al crear el archivo", error));
+}
+
+export { createMarkdownFile }
+\end{minted}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.0\textwidth]{img/create_markdown.png}
+  \caption{Creando archivo y almacenando en el servidor}
+\end{figure}
+
+Como se ha observado en todas las funciones de peticion AJAX, al final siempre exportabamos dicha función. Esta idea fue con el objetivo de organizar nuestro proyecto y hacer más manejable en cuanto a los errores.
+
+\begin{minted}[bgcolor=background]{javascript}
+import { listMarkdownFiles } from "./listMarkdown.js";
+import { showMarkdownFile } from "./showMarkdown.js";
+import { createMarkdownFile } from "./createMarkdown.js";
+
+listMarkdownFiles();
+
+document.getElementById('files').addEventListener('click', (event) => {
+  if (event.target.tagName === 'LI')
+      showMarkdownFile(event.target.textContent);
+});
+
+document.getElementById("createFile").addEventListener("click", createMarkdownFile);
+\end{minted}
+
