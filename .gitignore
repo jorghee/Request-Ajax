@@ -1,0 +1,11 @@
+*.class
+*.jar
+*.aux
+*.log
+*.out
+*.toc
+*.pyg
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+_minted-javascript_report

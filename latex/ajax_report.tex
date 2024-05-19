@@ -1,0 +1,73 @@
+\documentclass[10pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english, spanish]{babel}
+\usepackage[left=25mm, right=25mm, top=35mm, bottom=30mm, headheight=35mm]{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{indentfirst}
+
+% Syntax customization
+\usepackage{minted}
+\usemintedstyle{nord}
+\setminted{
+  breaklines,
+  linenos,
+  frame=lines,
+  fontsize=\footnotesize
+}
+
+% Define background color
+\definecolor{background}{HTML}{2E3440}
+
+% Variables
+\newcommand{\university}{Universidad Nacional de San Agustín de Arequipa}
+\newcommand{\faculty}{Facultad de Ingeniería de Producción y Servicios}
+\newcommand{\program}{Escuela Profesional de Ingeniería de Sistemas}
+\newcommand{\semester}{2024 - A}
+\newcommand{\course}{img/web_programming.png}
+\newcommand{\topic}{img/ajax.png}
+\newcommand{\professor}{Carlo Jose Luis Corrales Delgado}
+\newcommand{\students}{Mamani Anahua, Victor Narciso \\ Mamani Huarsaya, Jorge Luis \\  Quispe Marca Edysson Darwin \\Velarde Saldaña Jhossep Fabritzio \\ Zuñiga Villacorta Peter Sebastian} 
+\newcommand{\githubOne}{https://github.com/jorghee/tarea\_ajax}
+\newcommand{\githubTwo}{https://github.com/jorghee/ajax\_markdown}
+\newcommand{\mydate}{18 de mayo, 2024}
+
+% Just parts and chapters numbered
+\setcounter{secnumdepth}{0}
+
+% Head and foot customization
+\pagestyle{fancy}
+\lhead{\raisebox{-0.2\height}{\includegraphics[width=4cm]{img/logo_unsa.png}}}
+\chead{\fontsize{8}{8}\selectfont \university \\ \faculty \\ \textbf{\program}}
+\rhead{\raisebox{-0.2\height}{\includegraphics[width=3.5cm]{img/logo_episunsa.png}}}
+\lfoot{Estudiantes \student}
+\cfoot{}
+\rfoot{Pág. \thepage}
+
+\begin{document}
+
+
+
+\begin{titlepage}
+	\centering
+	\includegraphics[width=14cm]{\course} \par
+  \vfill \vfill
+	\includegraphics[width=15cm]{\topic}\par
+  \vfill \vfill
+  {\textbf{Profesor(a):} \par}
+	\professor \vfill
+  {\textbf{Estudiante:} \par}
+	\students \vfill
+  {\textbf{Repositorios GitHub:} \par}
+  \href{\githubOne}{\githubOne}\\
+  \href{\githubTwo}{\githubTwo}\\
+  \vfill
+  {\large \mydate \par}
+\end{titlepage}
+
+\end{document}
